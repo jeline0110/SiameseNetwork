@@ -1,2 +1,2 @@
 # Siamese_Network
-## In this work,we will train a Siamese network for the retrival of seal.
+## In this work,we will train a Siamese Network for the retrival of the Chinese seal.
