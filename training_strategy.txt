@@ -1,0 +1,32 @@
+*******--------|||  For 'my-train.py'   |||----------******
+Step1: Edit the initial settings in the tf.FLAG: 
+       # The most important ones:
+         a)'init_num_class' should be changed from 1000 to 4000, then to 10000,Gradually add training nodes.
+         b) Note the 'fintune' should be 'True' except the case of the first time training. 
+         c) After the model initilized with the first 1000 nodes, we fintune from'finetune_ckpt_path'. This path maybe different depends the training stopped early or late.   
+         d) 'seal_bg_dir' is the seal data with background path, which has Two-level directory, every dir consists of 50 augmented seal images. 'seal_simple_dir' which is the path for simple data.
+
+Step2: Training WITHOUT 'siamese_loss' and WITHOUT 'data_aug_slight', and WITHOUT 'div_input'.
+       Now we can train the model iteratively via run 'Python my_train.py'.
+       a) Train the model with only 1000 classes with the following settings:
+          [num_class:10000, init_num_class:1000, sia_and_softmax:Flase, fintune:False, learning_rate:1e-3]
+       b) When the accuracy is alomost 100%(>98%) and the model will be saved automatically.
+       c) We fintune with more init class num (i.e., 4000) under the following settings:
+          [num_class:10000, init_num_class:4000, sia_and_softmax:Flase, fintune:True, finetune_ckpt_path:'./logs/model.ckpt-1000', learning_rate:1e-3]
+       d) When the accuracy is alomost 100%(>98%) and the model will be saved automatically.
+       e) We fintune as above steps.
+       ...
+       f) Finally, we active all 10,000 nodes and the accuracy with 10,000 classes can be above 98%.          
+        
+Step3: Training WITH 'siamese_loss' and WITH 'data_aug_slight', and WITHOUT 'div_input'.
+       Now we can train the model with siamese, which will be fintuned from above well trained 10,000-class model!
+       a) Edit 'sia_and_softmax' and data_aug_slight' to 'True'.
+       b) Train the model, until the sia-loss is around 2.0 and train_acc is round 90%.
+
+Step4: Training WITH 'siamese_loss' and WITH 'data_aug_slight' and WITH 'div_input'.
+       Now we can train the model with div_input, add seal simple data and random input, as to improve model performance.
+       a) Edit 'div_input' to 'True'.
+       b) Train the model with 1e-3 learning_rate , until the model train_acc is ropund 96%.
+       
+Step5: Drop the 'learning_rate' to '1e-4'.
+       Train the model until the accuracy to roughly 99%.
